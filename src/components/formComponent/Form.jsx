@@ -53,8 +53,8 @@ const FormComponent = () => {
 
   const obtenerDatos = async () => {
     try {
-      await onSnapshot(collection(db, "estudiantes"), (query)=>{
-        setEstudiantes(query.docs.map((doc)=>({...doc.data(), id:doc.id})))
+      await onSnapshot(collection(db, "estudiantes"), (query) => {
+        setEstudiantes(query.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
       })
       console.log(estudiantes);
     } catch (error) {
@@ -242,30 +242,33 @@ const FormComponent = () => {
   //#region Formulario
 
   return (
-    <div className="card-body">
+    <div className="card-body bg-dark bg-opacity-10">
       <div className="row">
         <div className="col">
           <a
-            className="btn btn-primary"
+            className="btn btn-dark"
             data-bs-toggle="collapse"
             href="#collapseExample"
             role="button"
             aria-expanded="false"
             aria-controls="collapseExample"
           >
-            {modoEdicion ? 'Editar' : 'Agregar'}
+            Desplegar Crud
           </a>
         </div>
       </div>
 
       <form onSubmit={modoEdicion ? editar : guardarDatos}>
-        <div className="row">
+        <div className="row mt-3">
           <div className="col">
             <div
               className={editmode ? " collapse show" : "collapse"}
               id="collapseExample"
             >
               <div className="card card-body">
+                <div className="col text-center">
+                  <h2>{modoEdicion ? "Editando Estudiante" : "Agregando Estudiante"}</h2>
+                </div>
                 <div className="mb-3">
                   {modoEdicion ? 'Edita los datos del estudiante' : 'Ingrese los datos del estudiante para agregarlo'}
                 </div>
@@ -402,8 +405,8 @@ const FormComponent = () => {
 
                 <div className="row mt-3">
                   <div className="col mt-3">
-                    <button type="submit" className="btn btn-primary">
-                      Enviar
+                    <button type="submit" className="btn btn-secondary">
+                      {modoEdicion ? "Editar" : "Agregar"}
                     </button>
                   </div>
                 </div>
@@ -413,8 +416,13 @@ const FormComponent = () => {
         </div>
       </form>
 
+      <div className="row mt-3 mb-3">
+        <div className="col text-center">
+          <h2>Listado de Estudiantes</h2>
+        </div>
+      </div>
 
-      <div className="row mt-5">
+      <div className="row mt-4 mb-4">
         {
           estudiantes.map((item) => (
             <div className="col " key={item.id}>

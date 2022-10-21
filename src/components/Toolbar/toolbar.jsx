@@ -3,7 +3,7 @@ import './Toobar.css';
 
 function Toolbar() {
   return (
-    <div className="App2">
+    <div className="App2 bg-dark">
         <ul className="nav nav-pills ">
             <li className="nav-item">
                 <div className="nav-link" >Taller React Netlify Firebase</div>

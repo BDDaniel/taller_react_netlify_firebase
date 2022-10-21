@@ -12,7 +12,7 @@ const Card = ({ item, methondev, editar }) => {
 
   //   console.log(methondev);
   return (
-    <div className="card mt-3" style={{ width: "18rem" }}>
+    <div className="card mt-3 border border-dark border-2" style={{ width: "18rem" }}>
       <img src="https://picsum.photos/500" className="card-img-top" alt="..."></img>
       <div className="card-body">
         <h5 className="card-title mb-3">{item.nombre + " " + item.apellido}</h5>
@@ -40,12 +40,14 @@ const Card = ({ item, methondev, editar }) => {
         <div className="row">
           <div className="col" onClick={editarCard}>
             <p className="btn btn-primary">
+              Editar&nbsp;
               <i class="fa fa-pencil" aria-hidden="true"></i>
             </p>
           </div>
 
           <div className="col" onClick={eliminarCard}>
             <p className="btn btn-danger">
+              Eliminar&nbsp;
               <i className="fa fa-trash" aria-hidden="true"></i>
             </p>
           </div>
