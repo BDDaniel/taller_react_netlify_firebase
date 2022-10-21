@@ -1,7 +1,7 @@
 import "./Form.css";
 import React from "react";
-import { fire } from "../../services/firebase";
-// import { nanoid } from "nanoid";
+import { db } from "../../services/firebase";
+import { collection, addDoc, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import Card from "../cardComponent/Card";
 
 const FormComponent = () => {
@@ -48,18 +48,15 @@ const FormComponent = () => {
 
   React.useEffect(() => {
     obtenerDatos();
+    // eslint-disable-next-line
   }, []);
 
   const obtenerDatos = async () => {
     try {
-      const db = fire.firestore();
-      const data = await db.collection("estudiantes").get();
-      const array = data.docs.map((item) => ({
-        id: item.id,
-        ...item.data(),
-      }));
-      setEstudiantes(array)
-      console.log(array);
+      await onSnapshot(collection(db, "estudiantes"), (query)=>{
+        setEstudiantes(query.docs.map((doc)=>({...doc.data(), id:doc.id})))
+      })
+      console.log(estudiantes);
     } catch (error) {
       console.log(error);
     }
@@ -75,13 +72,11 @@ const FormComponent = () => {
     e.preventDefault();
 
     if (await valid()) {
-      console.log("entra aca");
       return;
     }
-    console.log("valid()");
 
     try {
-      const db = fire.firestore();
+      const docRef = doc(db, 'estudiantes', idEdit);
       const estudiante = {
         nombre: nombre,
         apellido: apellido,
@@ -91,8 +86,7 @@ const FormComponent = () => {
         programa: programa,
         semestre: semestre
       };
-      console.log(idEdit);
-      await db.collection('estudiantes').doc(idEdit).update(estudiante)
+      await updateDoc(docRef, estudiante);
     } catch (error) {
       console.log(error);
     }
@@ -147,7 +141,7 @@ const FormComponent = () => {
       error = true;
     }
 
-    if (!celular.trim()) {
+    if (!celular.toString().trim()) {
       setCelularError("Celular obligatorio!");
       error = true;
     }
@@ -162,7 +156,7 @@ const FormComponent = () => {
       error = true;
     }
 
-    if (!semestre.trim()) {
+    if (!semestre.toString().trim()) {
       setSemestreError("Semestre obligatorio!");
       error = true;
     }
@@ -178,13 +172,10 @@ const FormComponent = () => {
     e.preventDefault();
 
     if (await valid()) {
-      console.log("entra aca");
       return;
     }
-    console.log("valid()");
 
     try {
-      const db = fire.firestore();
       const estudiante = {
         nombre: nombre,
         apellido: apellido,
@@ -194,7 +185,7 @@ const FormComponent = () => {
         programa: programa,
         semestre: semestre
       };
-      await db.collection('estudiantes').add(estudiante)
+      await addDoc(collection(db, 'estudiantes'), estudiante)
       setEstudiantes([...estudiantes,
         estudiante])
     } catch (error) {
@@ -212,8 +203,7 @@ const FormComponent = () => {
   const eliminar = async (id) => {
     console.log(id);
     try {
-      const db = fire.firestore()
-      await db.collection('estudiantes').doc(id).delete()
+      await deleteDoc(doc(db, 'estudiantes', id))
       obtenerDatos()
     } catch (error) {
       console.log(error)
@@ -435,7 +425,7 @@ const FormComponent = () => {
       </div>
     </div>
   );
-  
+
   //#endregion
 
 };
