@@ -1,0 +1,14 @@
+.App2{
+    background-color: #0e62e8;
+    color: white;
+    padding: 10px;
+}
+
+.nav-link{
+    color: white;
+}
+
+
+.nav-link .active{
+    color: white;
+}
